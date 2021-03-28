@@ -1,0 +1,6 @@
+---
+
+haproxy_container_version: "2.2.4"
+haproxy_configuration: ""
+
+...

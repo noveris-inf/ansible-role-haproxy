@@ -1,0 +1,24 @@
+---
+
+- name: Copy haproxy configuration
+  template:
+    dest: /etc/lb-haproxy.cfg
+    src: haproxy.cfg.j2
+    owner: root
+    group: root
+    mode: 0644
+  register: haproxy_config
+
+- name: lb container
+  docker_container:
+    name: lb-haproxy
+    image: "haproxy:{{ haproxy_container_version }}""
+    volumes:
+      - "/etc/lb-haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    state: "started"
+    restart_policy: "always"
+    network_mode: "host"
+    recreate: "{{ true if haproxy_config.changed else false }}"
+    restart: "{{ true if haproxy_config.changed else false }}"
+
+...
