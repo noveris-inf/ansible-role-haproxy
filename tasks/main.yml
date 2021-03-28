@@ -1,9 +1,9 @@
 ---
 
 - name: Copy haproxy configuration
-  template:
+  copy:
     dest: /etc/lb-haproxy.cfg
-    src: haproxy.cfg.j2
+    content: "{{ haproxy_configuration }}"
     owner: root
     group: root
     mode: 0644
@@ -12,7 +12,7 @@
 - name: lb container
   docker_container:
     name: lb-haproxy
-    image: "haproxy:{{ haproxy_container_version }}""
+    image: "haproxy:{{ haproxy_container_version }}"
     volumes:
       - "/etc/lb-haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
     state: "started"
