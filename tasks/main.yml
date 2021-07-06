@@ -11,14 +11,12 @@
 
 - name: lb container
   docker_container:
-    name: lb-haproxy
+    name: "{{ haproxy_container_name }}"
     image: "haproxy:{{ haproxy_container_version }}"
     volumes:
       - "/etc/lb-haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
     state: "started"
-    restart_policy: "always"
+    restart_policy: "{{ haproxy_restart_policy }}"
     network_mode: "host"
     recreate: "{{ true if haproxy_config.changed else false }}"
     restart: "{{ true if haproxy_config.changed else false }}"
-
-...

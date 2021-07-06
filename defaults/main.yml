@@ -2,5 +2,5 @@
 
 haproxy_container_version: "2.2.4"
 haproxy_configuration: ""
-
-...
+haproxy_restart_policy: "unless-stopped"
+haproxy_container_name: "lb-haproxy"
