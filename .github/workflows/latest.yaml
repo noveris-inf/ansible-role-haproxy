@@ -16,14 +16,14 @@ jobs:
         with:
           submodules: true
 
-      - name: Build
-        shell: pwsh
+      - name: Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install yamllint
+        run: pip3 install yamllint
+
+      - name: Lint code.
         run: |
-          ./Build.ps1 -Stages Build,Test,Upload
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_USERNAME: ${{ github.actor }}
-          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_REGISTRY: docker.pkg.github.com
-          DOCKER_BASEPATH: ${{ github.repository }}
-          DOCKER_TAGS: "main-latest"
+          yamllint .
