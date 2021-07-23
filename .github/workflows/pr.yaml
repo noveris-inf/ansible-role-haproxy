@@ -8,15 +8,15 @@ on:
       - main
 
 jobs:
-  Build:
-    name: "Build"
+  Linting:
+    name: "Linting"
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          submodules: true
+          submodules: false
 
       - name: Python 3
         uses: actions/setup-python@v2
