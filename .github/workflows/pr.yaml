@@ -1,4 +1,4 @@
-name: Branch
+name: pr
 on:
   push:
     branches-ignore:
@@ -8,8 +8,8 @@ on:
       - main
 
 jobs:
-  Linting:
-    name: "Linting"
+  pr:
+    name: "pr"
     runs-on: ubuntu-latest
 
     steps:
