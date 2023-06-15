@@ -4,7 +4,6 @@ services:
   haproxy:
     build:
       context: ./haproxy
-    container_name: haproxy
     hostname: haproxy
 {% if haproxy_published_ports | default([]) | length > 1 %}
     ports: {{ haproxy_published_ports }}
@@ -12,7 +11,7 @@ services:
     volumes:
       - "{{ haproxy_config_dir }}/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
     user: "{{ haproxy_user_id }}:{{ haproxy_group_id }}"
-{% if haproxy_environment | default([]) | length > 1 %}
+{% if haproxy_environment | default([]) | length > 0 %}
     environment: {{ haproxy_environment }}
 {% endif %}
     labels:
@@ -21,3 +20,17 @@ services:
       restart_policy:
         condition: "{{ haproxy_restart_condition }}"
         delay: 10s
+{% if haproxy_external_networks | default([]) | length > 0 %}
+    networks:
+{% for network in haproxy_external_networks %}
+      {{ network }}:
+{% endfor %}
+{% endif %}
+
+{% if haproxy_external_networks | default([]) | length > 0 %}
+networks:
+{% for network in haproxy_external_networks %}
+  {{ network }}:
+    external: true
+{% endfor %}
+{% endif %}

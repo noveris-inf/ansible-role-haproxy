@@ -3,25 +3,25 @@
 - name: HAProxy Initial User
   user:
     state: present
-    name: "{{ haproxy_initial_user }}"
-  register: haproxy_initial_user_state
+    name: "{{ haproxy_user }}"
+  register: haproxy_user_state
 
 - name: HAProxy Initial Group
   group:
     state: present
-    name: "{{ haproxy_initial_group }}"
-  register: haproxy_initial_group_state
+    name: "{{ haproxy_group }}"
+  register: haproxy_group_state
 
 - name: Record HAProxy IDs
   set_fact:
-    haproxy_initial_user_id: "{{ haproxy_initial_user_state.uid }}"
-    haproxy_initial_group_id: "{{ haproxy_initial_group_state.gid }}"
+    haproxy_user_id: "{{ haproxy_user_state.uid }}"
+    haproxy_group_id: "{{ haproxy_group_state.gid }}"
 
 - name: HAProxy Directory
   file:
     state: directory
-    owner: "{{ haproxy_initial_user_id }}"
-    group: "{{ haproxy_initial_group_id }}"
+    owner: "{{ haproxy_user_id }}"
+    group: "{{ haproxy_group_id }}"
     path: "{{ haproxy_config_dir }}"
     mode: "0750"
 
@@ -29,24 +29,24 @@
   file:
     path: "{{ haproxy_config_dir }}/compose"
     state: directory
-    owner: "{{ haproxy_initial_user_id }}"
-    group: "{{ haproxy_initial_group_id }}"
+    owner: "{{ haproxy_user_id }}"
+    group: "{{ haproxy_group_id }}"
     mode: "0750"
 
 - name: Copy compose files
   copy:
     src: compose/
     dest: "{{ haproxy_config_dir }}/compose"
-    owner: "{{ haproxy_initial_user_id }}"
-    group: "{{ haproxy_initial_group_id }}"
+    owner: "{{ haproxy_user_id }}"
+    group: "{{ haproxy_group_id }}"
     mode: "0640"
 
 - name: Copy haproxy configuration
   copy:
     dest: "{{ haproxy_config_dir }}/haproxy.cfg"
     content: "{{ haproxy_configuration }}"
-    owner: "{{ haproxy_initial_user_id }}"
-    group: "{{ haproxy_initial_group_id }}"
+    owner: "{{ haproxy_user_id }}"
+    group: "{{ haproxy_group_id }}"
     mode: "0640"
   register: haproxy_config
 
@@ -60,8 +60,8 @@
   template:
     src: "{{ item.src }}"
     dest: "{{ haproxy_config_dir }}/compose/{{ item.dest }}"
-    owner: "{{ haproxy_initial_user_id }}"
-    group: "{{ haproxy_initial_group_id }}"
+    owner: "{{ haproxy_user_id }}"
+    group: "{{ haproxy_group_id }}"
     mode: "0600"
   loop:
     - src: docker-compose.yml.j2
