@@ -8,8 +8,7 @@ services:
 {% if haproxy_published_ports | default([]) | length > 1 %}
     ports: {{ haproxy_published_ports }}
 {% endif %}
-    volumes:
-      - "{{ haproxy_config_dir }}/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    volumes: {{ [ haproxy_config_dir + '/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg' ] + haproxy_volumes }}
     user: "{{ haproxy_user_id }}:{{ haproxy_group_id }}"
 {% if haproxy_environment | default([]) | length > 0 %}
     environment: {{ haproxy_environment }}

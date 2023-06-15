@@ -38,3 +38,5 @@ haproxy_configuration: |
 
 haproxy_user: haproxy
 haproxy_group: haproxy
+
+haproxy_volumes: []
