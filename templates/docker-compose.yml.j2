@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  haproxy:
+    build:
+      context: ./haproxy
+    container_name: haproxy
+    hostname: haproxy
+{% if haproxy_published_ports | default([]) | length > 1 %}
+    ports: {{ haproxy_published_ports }}
+{% endif %}
+    volumes:
+      - "{{ haproxy_config_dir }}/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    user: "{{ haproxy_user_id }}:{{ haproxy_group_id }}"
+{% if haproxy_environment | default([]) | length > 1 %}
+    environment: {{ haproxy_environment }}
+{% endif %}
+    labels:
+      haproxy.config.md5sum: "{{ haproxy_config_stat.stat.checksum }}"
+    deploy:
+      restart_policy:
+        condition: "{{ haproxy_restart_condition }}"
+        delay: 10s

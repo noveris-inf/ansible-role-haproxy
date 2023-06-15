@@ -1,6 +1,44 @@
 ---
 
-haproxy_container_version: "2.2.4"
-haproxy_configuration: ""
-haproxy_restart_policy: "unless-stopped"
-haproxy_container_name: "lb-haproxy"
+haproxy_config_dir: "/etc/docker_haproxy"
+haproxy_deploy_name: "haproxy"
+haproxy_published_ports:
+  - protocol: tcp
+    target: 8443
+    published: 443
+  - protocol: tcp
+    target: 8080
+    published: 80
+haproxy_restart_condition: any
+haproxy_environment:
+  - "TZ=UTC"
+  - "PUID=1000"
+  - "PGID=1000"
+haproxy_configuration:
+  global
+    user $PUID
+    group $PGID
+    ssl-default-bind-options ssl-min-ver TLSv1.2
+    log stdout format rfc3164 daemon debug
+
+  resolvers default-resolver
+    parse-resolv-conf
+    hold valid 10s
+    hold other 30s
+    hold refused 30s
+    hold nx 30s
+    hold timeout 30s
+    hold obsolete 30s
+
+  defaults
+    log global
+    maxconn 100
+    timeout connect 10s
+    timeout client 30s
+    timeout server 30s
+    mode http
+    option httplog
+    default-server init-addr last,libc,none inter 30s fall 2 rise 2 resolvers default-resolver
+
+haproxy_initial_user: root
+haproxy_initial_group: root
