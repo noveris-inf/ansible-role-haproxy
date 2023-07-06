@@ -2,13 +2,7 @@
 
 haproxy_config_dir: "/etc/docker_haproxy"
 haproxy_deploy_name: "haproxy"
-haproxy_published_ports:
-  - protocol: tcp
-    target: 8443
-    published: 443
-  - protocol: tcp
-    target: 8080
-    published: 80
+haproxy_published_ports: []
 haproxy_restart_condition: any
 haproxy_environment:
   - "TZ=UTC"

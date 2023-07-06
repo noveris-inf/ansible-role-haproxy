@@ -4,8 +4,7 @@ services:
   haproxy:
     build:
       context: ./haproxy
-    hostname: haproxy
-{% if haproxy_published_ports | default([]) | length > 1 %}
+{% if haproxy_published_ports | default([]) | length > 0 %}
     ports: {{ haproxy_published_ports }}
 {% endif %}
     volumes: {{ [ haproxy_config_dir + '/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg' ] + haproxy_volumes }}
